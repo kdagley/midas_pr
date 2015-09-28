@@ -1,0 +1,3 @@
+[run]
+include = midas_pr/*
+omit = *migrations*
