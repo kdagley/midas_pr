@@ -32,6 +32,7 @@ DJANGO_APPS = (
     # 'django.contrib.humanize',
 
     # Admin
+    'grappelli',  # A jazzy skin for the Django admin interface.
     'django.contrib.admin',
 )
 THIRD_PARTY_APPS = (
@@ -158,6 +159,7 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 # Your stuff: custom template context processors go here
+                "django.core.context_processors.request",  # for grappelli: the request context processor
             ],
         },
     },
@@ -278,3 +280,4 @@ BROKER_URL = env("CELERY_BROKER_URL", default='django://')
 ########## END CELERY
 
 # Your common stuff: Below this line define 3rd party library settings
+GRAPPELLI_ADMIN_TITLE = 'Midas Gold Public Relations'
