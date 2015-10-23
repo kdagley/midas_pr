@@ -58,3 +58,7 @@ node_modules/
 
 # User-uploaded media
 midas_pr/media/
+
+# Testing Data in csv files
+.csv
+
