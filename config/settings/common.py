@@ -46,6 +46,7 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'midas_pr.users',  # custom users app
     # Your stuff: custom apps go here
+    'midas_pr.stakeholders',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
