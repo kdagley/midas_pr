@@ -4,15 +4,17 @@ from .models import Stakeholder, StakeholderGroup, Category, MidasOffice, Commun
 # Register your models here.
 
 
-def make_invite(modeladmin, request, queryset):
-    queryset.update(christmas_invite=True)
-make_invite.short_description = "Invite selected stakeholders to Christmas Party"
+def send_xmas(modeladmin, request, queryset):
+    queryset.update(christmas_card=True)
+send_xmas.short_description = "Send selected stakeholders a Christmas card"
 
 
 class StakeholderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'stakeholder_group', 'christmas_invite']
+    search_fields = ['name', 'stakeholder_group__group_name']
+    list_filter = ['category__category_name', 'work_address_city']
+    list_display = ['stakeholder_group', 'name', 'email_work', 'work_address_city', 'christmas_card']
     ordering = ['stakeholder_group', 'last_name']
-    actions = [make_invite]
+    actions = [send_xmas]
 
 
 admin.site.register(Stakeholder, StakeholderAdmin)
