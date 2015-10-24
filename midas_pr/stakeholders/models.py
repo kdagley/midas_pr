@@ -14,6 +14,17 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
 
 
+class SubCategory(models.Model):
+    subcategory_name = models.CharField(max_length=200, default='None')
+    category = models.ForeignKey(Category, default=1, null=True)
+
+    def __unicode__(self):
+        return str(self.category) + ' - ' + self.subcategory_name
+
+    class Meta:
+        verbose_name_plural = 'subcategories'
+
+
 class StakeholderGroup(models.Model):
     group_name = models.CharField(max_length=200, unique=True, default='Unknown')
 
@@ -37,7 +48,7 @@ class MidasOffice(models.Model):
 
 class Stakeholder(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    category = models.ForeignKey(Category, default=1, null=True)
+    subcategory = models.ForeignKey(SubCategory, default=1, null=True)
     name = models.CharField(max_length=200, blank=True)
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)

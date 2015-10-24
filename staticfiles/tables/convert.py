@@ -1,6 +1,6 @@
 import csv
 import datetime
-from midas_pr.stakeholders.models import Stakeholder, Category, StakeholderGroup, MidasOffice, CommunicationPreference
+from midas_pr.stakeholders.models import Stakeholder, Category, SubCategory, StakeholderGroup, MidasOffice, CommunicationPreference
 
 # run this inside django docker shell...
 # docker-compose -f dev.yml run django python manage.py shell
@@ -10,7 +10,7 @@ with open('staticfiles/tables/Stakeholders.csv', 'rb') as f:
     reader = csv.reader(f)
     for row in reader:
         if not row[0]:
-            row[0] = 'Unknown'
+            row[0] = 'Unknown-None'
         if not row[5]:
             row[5] = 'Unknown'
         if not row[6]:
@@ -29,10 +29,18 @@ with open('staticfiles/tables/Stakeholders.csv', 'rb') as f:
                 row[49] = datetime.date(2000, 1, 1)
         else:
             row[49] = datetime.date(2000, 1, 1)
+        if '-' in row[0]:
+            row[0] = row[0].split('-')
+        elif '/' in row[0]:
+            row[0] = row[0].split('/')
+        else:
+            row[0] = [row[0], 'None']
         try:
-            Stakeholder(category=Category.objects.get_or_create(category_name=row[0])[0],
+            cat = Category.objects.get_or_create(category_name=row[0][0])[0]
+            Stakeholder(subcategory=SubCategory.objects.get_or_create(subcategory_name=row[0][1], category=cat)[0],
                         stakeholder_group=StakeholderGroup.objects.get_or_create(group_name=row[5])[0],
-                        communication_preference=CommunicationPreference.objects.get_or_create(preference_name=row[6])[0],
+                        communication_preference=CommunicationPreference.objects.get_or_create(
+                            preference_name=row[6])[0],
                         midas_office=MidasOffice.objects.get_or_create(office_name=row[7])[0],
                         name=row[1], first_name=row[2], last_name=row[3], spouse=row[4], title=row[8],
                         phone_work=row[9], phone_mobile=row[10], phone_fax=row[11], phone_home=row[12],
