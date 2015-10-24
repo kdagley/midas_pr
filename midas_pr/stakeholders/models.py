@@ -65,7 +65,7 @@ class Stakeholder(models.Model):
     home_address_zip = models.CharField(max_length=200, blank=True)
     home_address_country = models.CharField(max_length=200, blank=True)
     stakeholder_notes = models.TextField(blank=True)
-    christmas_invite = models.BooleanField(default=False)
+    christmas_card = models.BooleanField(default=False)
     lf_open_house_2012 = models.BooleanField(default=False)
     ea1_comment = models.BooleanField(default=False)
     ea1_positive = models.NullBooleanField()
