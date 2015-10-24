@@ -60,5 +60,5 @@ node_modules/
 midas_pr/media/
 
 # Testing Data in csv files
-.csv
+*.csv
 
