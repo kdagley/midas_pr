@@ -31,6 +31,9 @@ class StakeholderGroup(models.Model):
     def __unicode__(self):
         return self.group_name
 
+    class Meta:
+        verbose_name = 'organization'
+
 
 class CommunicationPreference(models.Model):
     preference_name = models.CharField(max_length=200, unique=True, default='None')
@@ -48,14 +51,14 @@ class MidasOffice(models.Model):
 
 class Stakeholder(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    subcategory = models.ForeignKey(SubCategory, default=1, null=True)
+    subcategory = models.ForeignKey(SubCategory, null=True)
     name = models.CharField(max_length=200, blank=True)
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
     spouse = models.CharField(max_length=200, blank=True)
-    stakeholder_group = models.ForeignKey(StakeholderGroup, verbose_name='organization', default=1, null=True)
-    communication_preference = models.ForeignKey(CommunicationPreference, default=1, null=True)
-    midas_office = models.ForeignKey(MidasOffice, default=1, null=True)
+    stakeholder_group = models.ForeignKey(StakeholderGroup, verbose_name='organization', null=True)
+    communication_preference = models.ForeignKey(CommunicationPreference, null=True)
+    midas_office = models.ForeignKey(MidasOffice, null=True)
     title = models.CharField(max_length=200, blank=True)
     phone_work = models.CharField(max_length=200, blank=True)
     phone_mobile = models.CharField(max_length=200, blank=True)
@@ -76,6 +79,7 @@ class Stakeholder(models.Model):
     home_address_zip = models.CharField(max_length=200, blank=True)
     home_address_country = models.CharField(max_length=200, blank=True)
     stakeholder_notes = models.TextField(blank=True)
+    allow_data_exchange = models.BooleanField(default=False)
     christmas_card = models.BooleanField(default=False)
     lf_open_house_2012 = models.BooleanField(default=False)
     ea1_comment = models.BooleanField(default=False)

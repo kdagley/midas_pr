@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stakeholders', '0005_auto_20151024_1203'),
+        ('dataexchanges', '0002_auto_20151025_2014'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='subcategory',
-            name='subcategory_name',
-            field=models.CharField(default=b'None', max_length=200),
+            model_name='report',
+            name='third_party_name',
+            field=models.ManyToManyField(to='stakeholders.Stakeholder'),
         ),
     ]
