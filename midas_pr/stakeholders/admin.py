@@ -9,12 +9,18 @@ def send_xmas(modeladmin, request, queryset):
 send_xmas.short_description = "Send selected stakeholders a Christmas card"
 
 
+def allow_xchange(modeladmin, request, queryset):
+    queryset.update(allow_data_exchange=True)
+allow_xchange.short_description = "Allow exchange of data with selected stakeholders"
+
+
 class StakeholderAdmin(admin.ModelAdmin):
     search_fields = ['name', 'stakeholder_group__group_name']
-    list_filter = ['subcategory__subcategory_name', 'work_address_city']
-    list_display = ['stakeholder_group', 'name', 'email_work', 'work_address_city', 'christmas_card']
+    list_filter = ['subcategory__subcategory_name', 'work_address_city', 'allow_data_exchange']
+    list_display = ['stakeholder_group', 'name', 'email_work', 'work_address_city',
+                    'allow_data_exchange', 'christmas_card']
     ordering = ['stakeholder_group', 'last_name']
-    actions = [send_xmas]
+    actions = [allow_xchange, send_xmas]
 
 
 class SubCategoryAdmin(admin.ModelAdmin):
