@@ -1,7 +1,18 @@
 from django.db import models
 import datetime
+from django.db.models import Q
 
-# Create your models here.
+
+def nostakeholder():
+    return Q(name__exact='None') & Q(stakeholder_group__group_name__exact='Unknown')
+
+
+def midas_group_query():
+    return Q(stakeholder_group__group_name__startswith='Midas Gold') | nostakeholder()
+
+
+def allowed():
+    return Q(allow_data_exchange=True) | nostakeholder()
 
 
 class Category(models.Model):
@@ -27,6 +38,10 @@ class SubCategory(models.Model):
 
 class StakeholderGroup(models.Model):
     group_name = models.CharField(max_length=200, unique=True, default='Unknown')
+    allow_data_exchange = models.BooleanField(default=False)
+    primary_contact = models.ForeignKey('Stakeholder',
+                                        limit_choices_to=allowed,
+                                        null=True)
 
     def __unicode__(self):
         return self.group_name
@@ -49,7 +64,12 @@ class MidasOffice(models.Model):
         return self.office_name
 
 
+# nostakeholder = Q(name__exact='None') & Q(stakeholder_group__group_name__exact='Unknown')
+# midas_group_query = Q(stakeholder_group__group_name__startswith='Midas Gold') | nostakeholder
+# nostakeholder = 1
+# midas_group_query = {'stakeholder_group__group_name__startswith': 'Midas Gold'}
 class Stakeholder(models.Model):
+    nostakeholder = 1439
     created_at = models.DateTimeField(auto_now_add=True)
     subcategory = models.ForeignKey(SubCategory, null=True)
     name = models.CharField(max_length=200, blank=True)
@@ -59,6 +79,7 @@ class Stakeholder(models.Model):
     stakeholder_group = models.ForeignKey(StakeholderGroup, verbose_name='organization', null=True)
     communication_preference = models.ForeignKey(CommunicationPreference, null=True)
     midas_office = models.ForeignKey(MidasOffice, null=True)
+    manage_approvals = models.BooleanField(default=False)
     title = models.CharField(max_length=200, blank=True)
     phone_work = models.CharField(max_length=200, blank=True)
     phone_mobile = models.CharField(max_length=200, blank=True)
@@ -81,6 +102,7 @@ class Stakeholder(models.Model):
     stakeholder_notes = models.TextField(blank=True)
     allow_data_exchange = models.BooleanField(default=False)
     christmas_card = models.BooleanField(default=False)
+    card_sender = models.ForeignKey('self', default=nostakeholder, limit_choices_to=midas_group_query, null=True)
     lf_open_house_2012 = models.BooleanField(default=False)
     ea1_comment = models.BooleanField(default=False)
     ea1_positive = models.NullBooleanField()
