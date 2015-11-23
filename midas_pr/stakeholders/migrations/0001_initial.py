@@ -44,6 +44,7 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(max_length=200, blank=True)),
                 ('last_name', models.CharField(max_length=200, blank=True)),
                 ('spouse', models.CharField(max_length=200, blank=True)),
+                ('manage_approvals', models.BooleanField(default=False)),
                 ('title', models.CharField(max_length=200, blank=True)),
                 ('phone_work', models.CharField(max_length=200, blank=True)),
                 ('phone_mobile', models.CharField(max_length=200, blank=True)),
@@ -64,6 +65,7 @@ class Migration(migrations.Migration):
                 ('home_address_zip', models.CharField(max_length=200, blank=True)),
                 ('home_address_country', models.CharField(max_length=200, blank=True)),
                 ('stakeholder_notes', models.TextField(blank=True)),
+                ('allow_data_exchange', models.BooleanField(default=False)),
                 ('christmas_card', models.BooleanField(default=False)),
                 ('lf_open_house_2012', models.BooleanField(default=False)),
                 ('ea1_comment', models.BooleanField(default=False)),
@@ -89,8 +91,9 @@ class Migration(migrations.Migration):
                 ('site_tour_date', models.DateField(default=datetime.date(2000, 1, 1))),
                 ('tour_group', models.CharField(max_length=200, blank=True)),
                 ('lf_open_house_2013', models.BooleanField(default=False)),
-                ('communication_preference', models.ForeignKey(default=1, to='stakeholders.CommunicationPreference', null=True)),
-                ('midas_office', models.ForeignKey(default=1, to='stakeholders.MidasOffice', null=True)),
+                ('card_sender', models.ForeignKey(default=1439, to='stakeholders.Stakeholder', null=True)),
+                ('communication_preference', models.ForeignKey(to='stakeholders.CommunicationPreference', null=True)),
+                ('midas_office', models.ForeignKey(to='stakeholders.MidasOffice', null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -98,6 +101,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('group_name', models.CharField(default=b'Unknown', unique=True, max_length=200)),
+                ('allow_data_exchange', models.BooleanField(default=False)),
+                ('primary_contact', models.ForeignKey(to='stakeholders.Stakeholder', null=True)),
             ],
             options={
                 'verbose_name': 'organization',
@@ -117,11 +122,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='stakeholder',
             name='stakeholder_group',
-            field=models.ForeignKey(default=1, verbose_name=b'organization', to='stakeholders.StakeholderGroup', null=True),
+            field=models.ForeignKey(verbose_name=b'organization', to='stakeholders.StakeholderGroup', null=True),
         ),
         migrations.AddField(
             model_name='stakeholder',
             name='subcategory',
-            field=models.ForeignKey(default=1, to='stakeholders.SubCategory', null=True),
+            field=models.ForeignKey(to='stakeholders.SubCategory', null=True),
         ),
     ]

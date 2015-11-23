@@ -14,13 +14,36 @@ def allow_xchange(modeladmin, request, queryset):
 allow_xchange.short_description = "Allow exchange of data with selected stakeholders"
 
 
+def disallow_xchange(modeladmin, request, queryset):
+    queryset.update(allow_data_exchange=False)
+disallow_xchange.short_description = "Disallow exchange of data with selected stakeholders"
+
+
+class StakeholderGroupAdmin(admin.ModelAdmin):
+    search_fields = ['group_name', 'primary_contact__name']
+    list_display = ['group_name', 'primary_contact', 'allow_data_exchange']
+    list_filter = ['allow_data_exchange']
+    ordering = ['group_name']
+
+
 class StakeholderAdmin(admin.ModelAdmin):
     search_fields = ['name', 'stakeholder_group__group_name']
-    list_filter = ['subcategory__subcategory_name', 'work_address_city', 'allow_data_exchange']
-    list_display = ['stakeholder_group', 'name', 'email_work', 'work_address_city',
-                    'allow_data_exchange', 'christmas_card']
+    list_filter = ['subcategory__category__category_name',
+                   'subcategory__subcategory_name',
+                   'work_address_city',
+                   'allow_data_exchange',
+                   'manage_approvals',
+                   'christmas_card']
+    list_display = ['stakeholder_group',
+                    'name',
+                    'email_work',
+                    'work_address_city',
+                    'allow_data_exchange',
+                    'manage_approvals',
+                    'christmas_card',
+                    'card_sender']
     ordering = ['stakeholder_group', 'last_name']
-    actions = [allow_xchange, send_xmas]
+    actions = [allow_xchange, disallow_xchange, send_xmas]
 
 
 class SubCategoryAdmin(admin.ModelAdmin):
@@ -28,7 +51,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
     ordering = ['category__category_name', 'subcategory_name']
 
 admin.site.register(Stakeholder, StakeholderAdmin)
-admin.site.register(StakeholderGroup)
+admin.site.register(StakeholderGroup, StakeholderGroupAdmin)
 admin.site.register(Category)
 admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(CommunicationPreference)
