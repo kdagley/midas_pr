@@ -29,7 +29,7 @@ class ApprovalTracking(models.Model):
     nostakeholder = 1439
     document_data_name = models.CharField(max_length=200)
     from_1 = models.ForeignKey(Stakeholder, related_name='from_1',
-                               limit_choices_to=midas_group_query)
+                               limit_choices_to=midas_group_query, verbose_name='from')
     to = models.ManyToManyField(Stakeholder, related_name='to', limit_choices_to=midas_group_query)
     cc = models.ManyToManyField(Stakeholder, related_name='cc', limit_choices_to=midas_group_query)
     date = models.DateField(default=timezone.now)
