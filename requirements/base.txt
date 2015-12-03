@@ -44,3 +44,7 @@ celery==3.1.18
 
 # Good looking admin
 django-grappelli>=2.7.1
+
+# import export for admin
+django-import-export>=0.3.1
+

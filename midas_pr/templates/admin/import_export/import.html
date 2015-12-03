@@ -1,0 +1,147 @@
+{% extends "admin/import_export/base.html" %}
+{% load url from future %}
+{% load i18n %}
+{% load admin_urls %}
+{% load import_export_tags %}
+
+{% block breadcrumbs_last %}
+{% trans "Import" %}
+{% endblock %}
+
+{% block content %}
+<h1>{% trans "Import" %}</h1>
+
+{% if confirm_form %}
+  <form action="{% url opts|admin_urlname:"process_import" %}" method="POST">
+    {% csrf_token %}
+    {{ confirm_form.as_p }}
+     <div class="grp-form-row">
+      <div class="grp-module">
+       <h2>{% trans "Below is a preview of data to be imported. Red indicates deletions. Green is new data." %}</h2>
+      </div>
+     </div>
+
+      <footer class="grp-module grp-submit-row grp-fixed-footer">
+          <header style="display:none"><h1>Submit Options</h1></header>
+        <ul>
+          <li class="grp-float-left"><a href="." class="grp-button grp-cancel-link">Cancel</a></li>
+          <li><input type="submit" name="confirm" value="{% trans 'Confirm import' %}" class="grp-button grp-default" /></li>
+        </ul>
+      </footer>
+
+  </form>
+
+{% else %}
+  <form action="" method="post" id="{{ opts.module_name }}_form" enctype="multipart/form-data">
+   {% csrf_token %}
+   <div>
+    <div class="grp-form-row">
+      <div class="grp-module">
+          <h2>{% trans "Any of these fields may be imported (only id field is required, but may be empty):" %}</h2>
+          <div class="grp-module">
+             {% for f in fields  %}
+              <div class="grp-row"><p>{{ f }}</p></div>
+             {% endfor %}
+          </div>
+          <div class="grp-module">
+            <div class="grp-row">
+              <p>(NOTE: Any fields at the end containing double__underscore are for reference only and are not imported)</p>
+            </div>
+          </div>
+      </div>
+     </div>
+    </div>
+
+        {% for field in form %}
+          <div class="grp-form-row">
+            <fieldset class="grp-module">
+              <div class="grp-row grp-cells-1 {% if field.errors %} grp-errors{% endif %}">
+                  {% if field.errors %}
+                      <p class="errornote">{% trans "Please correct the error below." %}</p>
+                      <ul class="errorlist"><li> {{ field.errors }}</li></ul>
+                  {% endif %}
+
+                <div class="c-1">{{ field.label_tag }}</div>
+                <div class="c-2">{{ field }}
+                  {% if field.field.help_text %}
+                    <p class="grp-help">{{ field.field.help_text|safe }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        {% endfor %}
+
+      <footer class="grp-module grp-submit-row grp-fixed-footer">
+          <header style="display:none"><h1>Submit Options</h1></header>
+        <ul>
+          <li><input type="submit" value="{% trans 'Upload' %}" class="grp-button grp-default" /></li>
+        </ul>
+      </footer>
+
+   </div>
+  </form>
+{% endif %}
+
+{% if result %}
+
+  {% if result.has_errors %}
+    <h2>{% trans "Errors" %}</h2>
+    <ul>
+      {% for error in result.base_errors  %}
+      <li>
+        {{ error.error }}
+        <div class="traceback">{{ error.traceback|linebreaks }}</div>
+      </li>
+      {% endfor %}
+      {% for line, errors in result.row_errors %}
+        {% for error in errors %}
+          <li>
+            {% trans "Line number" %}: {{ line }} - {{ error.error }}
+            <div>{{ error.row }}</div>
+            <div class="traceback">{{ error.traceback|linebreaks }}</div>
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+
+  {% else %}
+
+    <div>
+      <div class="grp-doc-code-source">
+        <table class="grp-full-width">
+          <thead>
+            <tr>
+              <th></th>
+              {% for field in result.diff_headers %}
+                <th>{{ field }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          {% for row in result.rows %}
+          <tr>
+            <td>
+              {% if row.import_type == 'new' %}
+                {% trans "New" %}
+              {% elif row.import_type == 'skip' %}
+                {% trans "Skipped" %}
+              {% elif row.import_type == 'delete' %}
+                {% trans "Delete" %}
+              {% elif row.import_type == 'update' %}
+                {% trans "Update" %}
+              {% endif %}
+            </td>
+            {% for field in row.diff %}
+            <td>
+              {{ field }}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  {% endif %}
+
+  {% endif %}
+{% endblock %}
