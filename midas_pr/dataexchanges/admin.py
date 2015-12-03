@@ -1,5 +1,30 @@
 from django.contrib import admin
 from .models import ApprovalTracking, Report, Category
+from import_export import resources
+from import_export.admin import ImportExportMixin
+
+
+
+class ReportResource(resources.ModelResource):
+
+    class Meta:
+        model = Report
+        fields = ('id', 'document_data_name', 'document_data_type', 'mg_employee_assigned',
+                  'mg_employee_assigned__name', 'third_party_organization', 'third_party_organization__group_name',
+                  'third_party_name', 'third_party_name__name', 'date_sent_received',
+                  'category', 'category__name', 'purpose', 'approved', 'description', 'response_required',
+                  'response_due_date', 'comments', 'data_saved_as', 'attachments',)
+
+
+class ApprovalTrackingResource(resources.ModelResource):
+
+    class Meta:
+        model = ApprovalTracking
+        fields = ('id', 'document_data_name', 'from_1', 'from_1__name', 'to', 'cc',
+                  'date', 'purpose_of_data_exchange',
+                  'third_party_organization_to_receive_data', 'third_party_organization_to_receive_data__group_name',
+                  'third_party_requested_to_receive_data', 'third_party_requested_to_receive_data__name',
+                  'datasets', 'approved', 'approved_by',)
 
 
 def data_approved(modeladmin, request, queryset):
@@ -7,7 +32,8 @@ def data_approved(modeladmin, request, queryset):
 data_approved.short_description = "Approve selected for Data Exchange"
 
 
-class ApprovalTrackingAdmin(admin.ModelAdmin):
+class ApprovalTrackingAdmin(ImportExportMixin, admin.ModelAdmin):
+    resource_class = ApprovalTrackingResource
     search_fields = ['document_data_name', 'third_party_organization_to_receive_data__group_name']
     list_display = ['document_data_name',
                     'from_1',
@@ -25,7 +51,8 @@ class CategoryAdmin(admin.ModelAdmin):
     ordering = ['index']
 
 
-class ReportAdmin(admin.ModelAdmin):
+class ReportAdmin(ImportExportMixin, admin.ModelAdmin):
+    resource_class = ReportResource
     search_fields = ['document_data_name',
                      'mg_employee_assigned__name',
                      'third_party_organization__group_name']

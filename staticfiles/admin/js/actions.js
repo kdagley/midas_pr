@@ -1,7 +1,7 @@
 /**
  * GRAPPELLI ACTIONS.JS
  * minor modifications compared with the original js
- * 
+ *
  */
 
 (function($) {
@@ -116,7 +116,7 @@
         });
         // GRAPPELLI CUSTOM: REMOVED ALL JS-CONFIRMS
         // TRUSTED EDITORS SHOULD KNOW WHAT TO DO
-        
+
         // GRAPPELLI CUSTOM: submit on select
         $(options.actionSelect).attr("autocomplete", "off").change(function(evt){
             $(this).parents("form").submit();
