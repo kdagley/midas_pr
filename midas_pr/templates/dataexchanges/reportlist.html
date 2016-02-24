@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Third Party Communications</h2>
+
+    {% if report_list %}
+        {% for report in report_list %}
+            <a href="/dataexchanges/report/{{ report.id }}/" class="list-group-item">
+            <h5 class="list-group-item-heading">{{ report.document_data_name }}</h5>
+            </a>
+        {% endfor %}
+    {% else %}
+        <p>No reports are available.</p>
+    {% endif %}
+
+{% endblock %}

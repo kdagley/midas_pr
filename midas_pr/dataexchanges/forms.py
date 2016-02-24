@@ -4,6 +4,27 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
+from .models import ApprovalTracking, Report
+
+
+class ApprovalTrackingForm(forms.ModelForm):
+    class Meta:
+        model = ApprovalTracking
+        fields = ('document_data_name', 'from_1',
+                  'date', 'purpose_of_data_exchange',
+                  'third_party_organization_to_receive_data',
+                  'third_party_requested_to_receive_data',
+                  'datasets', 'approved',)
+
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ('document_data_name', 'document_data_type', 'mg_employee_assigned',
+                  'third_party_organization',
+                  'third_party_name', 'date_sent_received',
+                  'category', 'purpose', 'approved', 'description', 'response_required',
+                  'response_due_date', 'comments', 'data_saved_as', 'attachments',)
 
 
 class MessageForm(forms.Form):

@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a href="{% url 'dataexchanges:index' %}" class="list-group-item">
-            <h4 class="list-group-item-heading">Reports</h4>
-          </a>
+  <a href="{% url 'dataexchanges:reportlist' %}" class="list-group-item">
+    <h4 class="list-group-item-heading">Reports</h4>
+  </a>
+  <a href="{% url 'dataexchanges:aplist' %}" class="list-group-item">
+    <h4 class="list-group-item-heading">Approval Tracking</h4>
+  </a>
 {% endblock content %}
