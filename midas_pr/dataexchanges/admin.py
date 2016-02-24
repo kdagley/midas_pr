@@ -4,7 +4,6 @@ from import_export import resources
 from import_export.admin import ImportExportMixin
 
 
-
 class ReportResource(resources.ModelResource):
 
     class Meta:

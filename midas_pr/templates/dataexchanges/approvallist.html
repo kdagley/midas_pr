@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Data Exchange Approvals</h2>
+
+    {% if approval_list %}
+        {% for approval in approval_list %}
+            <a href="/dataexchanges/approval/{{ approval.id }}/" class="list-group-item">
+            <h5 class="list-group-item-heading">{{ approval.document_data_name }}</h5>
+            </a>
+        {% endfor %}
+    {% else %}
+        <p>No approvals are available.</p>
+    {% endif %}
+
+{% endblock %}
