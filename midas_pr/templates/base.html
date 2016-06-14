@@ -45,7 +45,6 @@
               <a class="nav-link nav-item" href="{% url 'home' %}">Home</a></li>
               <a class="nav-link nav-item" href="{% url 'about' %}">About</a></li>
             </nav>
-
             <nav class="nav navbar-nav pull-right">
               {% if request.user.is_authenticated %}
                 <a class="nav-link nav-item" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a></li>
@@ -60,8 +59,7 @@
       </nav>
     </div>
 
-    <div class="container">
-
+    <div class="jumbotron">
       {% if messages %}
           {% for message in messages %}
               <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>{{ message }}</div>

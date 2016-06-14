@@ -12,6 +12,11 @@
   border-color: #eed3d7;
 }
 
+/* Kelley insert to fix navbar (not in bootstrap dev 4) */
+.nav.navbar-nav.pull-right {
+  float: right !important;
+}
+
 /* This is a fix for the bootstrap4 alpha release */
 @media (max-width: 47.9em) {
   .navbar-nav .nav-item {
@@ -27,6 +32,7 @@
   .nav.navbar-nav.pull-right {
     float: none !important;
   }
+
 }
 
 /* Display django-debug-toolbar.
@@ -36,3 +42,4 @@
 [hidden][style="display: block;"] {
   display: block !important;
 }
+
